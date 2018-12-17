@@ -16,6 +16,14 @@ var $placeholders = document.getElementById("placeholders");
 var $guessesLeft = document.getElementById("guesses-left");
 var $incorrectLetters = document.getElementById("incorrect-letters");
 
+/* jQuery equivalents
+var $wins = $("#wins-count");
+var $losses = $("#losses-count");
+var $gameBtn = $("#new-game");
+var $placeholders = $("#placeholders");
+var $guessesLeft = $("#guesses-left");
+var $incorrectLetters = $("#incorrect-letters");
+ */
 
 // create a function to start a new game
 function newGame() {
@@ -31,13 +39,12 @@ function newGame() {
   // pick a new word to play against
   wordPicked = wordbank[Math.floor(Math.random() * wordbank.length)];
   console.log(wordPicked);
-  
+
   // generate placeholders based on wordPicked
-  for (var i = 0; i < wordPicked.length; i++ ) {
+  for (var i = 0; i < wordPicked.length; i++) {
     if (wordPicked[i] === " ") {
       pickedWordPlaceholders.push(" ");
-    }
-    else {
+    } else {
       pickedWordPlaceholders.push("_");
     }
   }
@@ -48,15 +55,20 @@ function newGame() {
   $placeholders.textContent = pickedWordPlaceholders.join(" ");
   $incorrectLetters.textContent = "";
 
-}
+  /* jQuery versions
+  $guessesLeft.text(guessesLeft);
+  $placeholders.text(pickedWordPlaceholders.join(" "));
+  $incorrectLetters.text("");
+  */
 
+}
 
 // create a function to check if letter guessed is correct (game logic)
 function checkLetter(letter) {
 
   // check to see if letter is in pickedWord (use loop)
   for (var i = 0; i < wordPicked.length; i++) {
-    // if pickedWord at this index's character matches the letter we picked, let's swap the placeholder "_" with the correct character 
+    // if pickedWord at this index's character matches the letter we picked, let's swap the placeholder "_" with the correct character
     if (wordPicked[i].toLowerCase() === letter.toLowerCase()) {
       pickedWordPlaceholders[i] = wordPicked[i];
     }
@@ -64,23 +76,29 @@ function checkLetter(letter) {
 
   // write placeholders to page to reflect a correct guess
   $placeholders.textContent = pickedWordPlaceholders.join(" ");
+  // jQuery $placeholders.text(pickedWordPlaceholders.join(" "));
+   
 
   // check for incorrect by seeing if letter made it into placeholders
   if (!pickedWordPlaceholders.includes(letter)) {
     // decrease guesses
-     guessesLeft--;
-     // update page to reflect less guesses
-     $guessesLeft.textContent = guessesLeft;
+    guessesLeft--;
+    // update page to reflect less guesses
+    $guessesLeft.textContent = guessesLeft;
+    //jQuery: $guessesLeft.text(guessesLeft);
+  
     // add incorrect letter to incorrect letter bank
-     incorrectLettersGuessed.push(letter);
+    incorrectLettersGuessed.push(letter);
     // let user know what incorrect letter was pressed
-     $incorrectLetters.textContent = incorrectLettersGuessed.join(", ");
+    $incorrectLetters.textContent = incorrectLettersGuessed.join(", ");
+    // jQuery: $incorrectLetters.text(incorrectLettersGuessed.join(", "));
   }
 
   // check if win
   if (wordPicked.toLowerCase() === pickedWordPlaceholders.join("").toLowerCase()) {
     wins++;
     $wins.textContent = wins;
+    // jQuery $wins.text(wins);
     gameActive = false;
   }
 
@@ -88,22 +106,21 @@ function checkLetter(letter) {
   if (guessesLeft === 0) {
     losses++;
     $losses.textContent = losses;
+    // jQuery $losses.text(losses);
     gameActive = false;
   }
 
 }
 
-
-
 // set up onkeyup event to capture letter
-document.onkeyup = function(event) {
+document.onkeyup = function (event) {
   console.log(event.key);
 
   // check if game is running
   if (gameActive === false) {
     alert("You need to press the button and start a new game");
     return false;
-  } 
+  }
 
   // check if we actually pressed a letter
   if (event.keyCode >= 65 && event.keyCode <= 90) {
@@ -118,12 +135,11 @@ document.onkeyup = function(event) {
     // send letter to function to check if correct
     checkLetter(event.key);
 
-  }
-  else {
+  } else {
     alert("Press a letter!");
   }
 }
 
-
-// set up event listener for when user clicks new game button to start a new game 
+// set up event listener for when user clicks new game button to start a new game
 $gameBtn.addEventListener("click", newGame);
+// jQuery: $gameBtn.on("click", newGame);
